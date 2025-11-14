@@ -279,3 +279,26 @@ body {
     min-height: 120px;
   }
 }
+#admin-section {
+  margin-top: 16px;
+}
+
+#user-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-delete-btn {
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  border-radius: 999px;
+  border: none;
+  background: #ff7676;
+  color: #fff;
+  cursor: pointer;
+}
+
+.user-delete-btn:hover {
+  opacity: 0.9;
+}

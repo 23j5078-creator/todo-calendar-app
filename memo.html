@@ -59,6 +59,18 @@
         <ul id="memo-list" class="memo-list">
           <!-- JSで生成 -->
         </ul>
+        <!-- ここから管理者エリア（adminユーザーだけ表示） -->
+      <section id="admin-section" class="card" hidden>
+        <h2>管理者メニュー（ユーザー管理）</h2>
+        <p class="auth-note">
+          admin ユーザーとしてログイン中のみ、この一覧が表示されます。<br>
+          ユーザーを削除すると、そのユーザーのメモもすべて削除されます。
+        </p>
+        <ul id="user-list" class="memo-list">
+          <!-- JSでユーザー一覧を生成 -->
+        </ul>
+      </section>
+      <!-- 管理者エリアここまで -->
       </section>
     </main>
 

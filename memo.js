@@ -13,9 +13,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const memoBodyInput = document.getElementById("memo-body");
   const addMemoBtn = document.getElementById("add-memo-btn");
   const memoListEl = document.getElementById("memo-list");
+  const adminSection = document.getElementById("admin-section");
+  const userListEl = document.getElementById("user-list");
 
   const CURRENT_USER_KEY = "memoapp-current-user";
   const USER_PREFIX = "memoapp-user-";
+  
+  const CURRENT_USER_KEY = "memoapp-current-user";
+  const USER_PREFIX = "memoapp-user-";
+
+  const ADMIN_USERNAME = "admin"; // これを追加
+
 
   let currentUser = null;
   let currentUserData = null;
@@ -119,6 +127,60 @@ document.addEventListener("DOMContentLoaded", () => {
       memoListEl.appendChild(li);
     }
   }
+  function renderUserList() {
+    userListEl.innerHTML = "";
+
+    // localStorage に保存されているユーザーキーを全部探す
+    const users = Object.keys(localStorage)
+      .filter((key) => key.startsWith(USER_PREFIX))
+      .map((key) => key.replace(USER_PREFIX, ""));
+
+    if (!users.length) {
+      const li = document.createElement("li");
+      li.className = "memo-item";
+      li.textContent = "登録されているユーザーはいません。";
+      userListEl.appendChild(li);
+      return;
+    }
+
+    users.forEach((username) => {
+      const li = document.createElement("li");
+      li.className = "memo-item";
+
+      const nameEl = document.createElement("span");
+      nameEl.textContent = username;
+
+      const btn = document.createElement("button");
+      btn.className = "user-delete-btn";
+      btn.textContent = "削除";
+
+      // admin 自分自身は削除できないようにする
+      if (username === ADMIN_USERNAME) {
+        btn.disabled = true;
+        btn.textContent = "admin（削除不可）";
+      } else {
+        btn.addEventListener("click", () => {
+          if (confirm(`${username} のアカウントとメモを削除しますか？`)) {
+            localStorage.removeItem(USER_PREFIX + username);
+            // もし現在ログイン中のユーザーなら、強制ログアウト
+            if (currentUser === username) {
+              handleLogout();
+            } else {
+              renderUserList();
+            }
+          }
+        });
+      }
+
+      const row = document.createElement("div");
+      row.className = "memo-title-row";
+      row.appendChild(nameEl);
+      row.appendChild(btn);
+
+      li.appendChild(row);
+      userListEl.appendChild(li);
+    });
+  }
 
   // ===== 画面切り替え =====
   function showAuthSection() {
@@ -129,15 +191,23 @@ document.addEventListener("DOMContentLoaded", () => {
     currentUserData = null;
   }
 
-  function showMemoSection(username, userData) {
+    function showMemoSection(username, userData) {
     currentUser = username;
     currentUserData = userData;
-    authSection.hidden = false;
     authSection.hidden = true;
     memoSection.hidden = false;
     currentUserLabel.textContent = username;
     renderMemos();
+
+    // 管理者かどうか判定
+    if (username === ADMIN_USERNAME) {
+      adminSection.hidden = false;
+      renderUserList();
+    } else {
+      adminSection.hidden = true;
+    }
   }
+
 
   // ===== ログインチェック =====
   (function init() {
