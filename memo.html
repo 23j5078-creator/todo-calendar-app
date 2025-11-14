@@ -3,30 +3,77 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>メモ帳</title>
+  <title>ログイン付きメモ帳</title>
   <link rel="stylesheet" href="memo.css">
 </head>
 <body>
+  <div class="app">
+    <header class="app-header">
+      <h1>メモ帳</h1>
+      <p class="subtitle">ユーザーごとにメモを保存（ブラウザ内のみ）</p>
+      <nav class="nav-links">
+        <a href="index.html">← やることリストに戻る</a>
+      </nav>
+    </header>
 
-<div class="login-container" id="login-area">
-  <h2>ログイン</h2>
-  <input type="text" id="login-user" placeholder="ユーザー名">
-  <input type="password" id="login-pass" placeholder="パスワード">
-  <button id="login-btn">ログイン</button>
-</div>
+    <main>
+      <!-- ログイン / 新規登録エリア -->
+      <section id="auth-section" class="card">
+        <h2>ログイン / 新規登録</h2>
+        <div class="auth-row">
+          <label>
+            ユーザー名
+            <input id="username" type="text" placeholder="例）kaz" autocomplete="username">
+          </label>
+          <label>
+            パスワード
+            <input id="password" type="password" placeholder="••••••" autocomplete="current-password">
+          </label>
+        </div>
+        <div class="auth-buttons">
+          <button id="login-btn">ログイン</button>
+          <button id="register-btn" class="secondary">新規登録</button>
+        </div>
+        <p class="auth-note">
+          ※ このアプリは <strong>このブラウザの localStorage</strong> にだけ保存します。<br>
+          共有PC（大学など）では他の人に見られる可能性があります。
+        </p>
+      </section>
 
-<div class="memo-app" id="memo-area" style="display:none;">
-  <h1>メモ帳</h1>
+      <!-- メモエリア（ログイン後に表示） -->
+      <section id="memo-section" class="card" hidden>
+        <div class="memo-header-row">
+          <div>
+            <h2>メモ一覧</h2>
+            <p class="logged-in-as">
+              ログイン中: <span id="current-user-label"></span>
+            </p>
+          </div>
+          <button id="logout-btn" class="danger">ログアウト</button>
+        </div>
 
-  <textarea id="memo-input" placeholder="メモを書く…"></textarea>
-  <button id="save-btn">メモ保存</button>
+        <!-- 新規メモ入力 -->
+        <div class="memo-input">
+          <textarea
+            id="memo-body"
+            rows="4"
+            placeholder="ここにメモを書いてください"
+          ></textarea>
+          <button id="add-memo-btn">メモを追加</button>
+        </div>
 
-  <h2>保存したメモ</h2>
-  <ul id="memo-list"></ul>
+        <!-- メモ一覧 -->
+        <ul id="memo-list" class="memo-list">
+          <!-- JSで生成 -->
+        </ul>
+      </section>
+    </main>
 
-  <button id="logout-btn" class="logout">ログアウト</button>
-</div>
+    <footer class="app-footer">
+      <small>※ ユーザー情報とメモはこの端末のブラウザにのみ保存されます。</small>
+    </footer>
+  </div>
 
-<script src="memo.js"></script>
+  <script src="memo.js"></script>
 </body>
 </html>

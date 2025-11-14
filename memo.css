@@ -1,53 +1,281 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
-  font-family: system-ui;
-  background: #f4f6fb;
   margin: 0;
-  padding: 20px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f4f6fb;
+  color: #333;
 }
 
-.login-container,
-.memo-app {
-  max-width: 600px;
-  margin: auto;
+.app {
+  max-width: 640px;
+  margin: 40px auto;
+  padding: 24px 20px 32px;
   background: #fff;
-  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.nav-links {
+  margin-top: 8px;
+}
+
+.nav-links a {
+  font-size: 0.8rem;
+  color: #4f7cff;
+  text-decoration: none;
+}
+
+.nav-links a:hover {
+  text-decoration: underline;
+}
+
+.card {
   border-radius: 12px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  padding: 16px 16px 20px;
+  background: #f8f9ff;
+  margin-bottom: 16px;
 }
 
-input, textarea, button {
+.card h2 {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+}
+
+/* 認証エリア */
+.auth-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.auth-row label {
+  flex: 1 1 160px;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.auth-row input {
   width: 100%;
-  margin-top: 10px;
-  padding: 10px;
-  font-size: 1rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+  margin-top: 4px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid #d0d4e4;
+  font-size: 0.9rem;
 }
 
-textarea {
-  height: 120px;
-  resize: vertical;
+.auth-row input:focus {
+  border-color: #4f7cff;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(79, 124, 255, 0.2);
 }
 
-button {
-  background: #4f7cff;
-  color: white;
+.auth-buttons {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.auth-buttons button {
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  border-radius: 999px;
   border: none;
   cursor: pointer;
 }
 
-button.logout {
-  background: #e05555;
+#login-btn {
+  background: #4f7cff;
+  color: #fff;
 }
 
-ul {
+.secondary {
+  background: #e0e4ff;
+  color: #333;
+}
+
+.danger {
+  background: #ff7676;
+  color: #fff;
+  border: none;
+}
+
+.auth-buttons button:hover {
+  opacity: 0.9;
+}
+
+.auth-buttons button:active {
+  transform: scale(0.97);
+}
+
+.auth-note {
+  font-size: 0.75rem;
+  color: #777;
+}
+
+/* メモエリア */
+.memo-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.logged-in-as {
+  margin: 2px 0 0;
+  font-size: 0.8rem;
+  color: #555;
+}
+
+#logout-btn {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.memo-input {
+  margin-top: 12px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#memo-body {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #d0d4e4;
+  font-size: 0.9rem;
+  resize: vertical;
+}
+
+#memo-body:focus {
+  border-color: #4f7cff;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(79, 124, 255, 0.2);
+}
+
+#add-memo-btn {
+  align-self: flex-end;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  border-radius: 999px;
+  border: none;
+  background: #4f7cff;
+  color: #fff;
+  cursor: pointer;
+}
+
+#add-memo-btn:hover {
+  opacity: 0.9;
+}
+
+#add-memo-btn:active {
+  transform: scale(0.97);
+}
+
+/* メモ一覧 */
+.memo-list {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
-li {
-  background: #eef1ff;
-  padding: 10px;
-  border-radius: 8px;
-  margin: 8px 0;
+.memo-item {
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px 10px 8px;
+  margin-bottom: 8px;
+  border: 1px solid #e1e4f0;
+}
+
+.memo-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.memo-meta {
+  font-size: 0.7rem;
+  color: #999;
+}
+
+.memo-body-text {
+  margin-top: 4px;
+  font-size: 0.9rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.memo-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.icon-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: #999;
+  padding: 2px 4px;
+}
+
+.icon-btn:hover {
+  color: #e05555;
+}
+
+/* フッター */
+.app-footer {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #aaa;
+}
+
+/* スマホ */
+@media (max-width: 480px) {
+  .app {
+    margin: 16px;
+    padding: 16px;
+  }
+
+  .auth-row {
+    flex-direction: column;
+  }
+
+  .app-header h1 {
+    font-size: 1.4rem;
+  }
+
+  .subtitle {
+    font-size: 0.8rem;
+  }
+
+  #memo-body {
+    min-height: 120px;
+  }
 }
