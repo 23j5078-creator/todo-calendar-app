@@ -282,42 +282,55 @@ body {
   width: 14px;
   height: 14px;
 }
-/* スマホ用（画面幅600px以下） */
+/* スマホ用 */
 @media (max-width: 600px) {
   body {
-    font-size: 14px; /* 全体を小さめに */
+    font-size: 14px;
   }
 
-  h1, h2, h3 {
-    font-size: 18px;  /* 見出しを小さく */
+  h1 {
+    font-size: 1.4rem;  /* 小さめに */
   }
 
-  input, button {
+  h2 {
+    font-size: 1.1rem;  /* もう少し小さめ */
+  }
+
+  /* 余分なスペースを削る */
+  .task-item {
+    padding: 8px 12px;
+  }
+
+  /* 日付と時刻の入力をスマホに合わせる */
+  input[type="date"], input[type="time"] {
     font-size: 14px;
     padding: 8px;
   }
 
-  .task {
-    font-size: 14px;  /* タスクの文字 */
+  .task-checkbox {
+    width: 16px;
+    height: 16px;
   }
+}
 
-  /* リスト間隔を詰める */
-  .task-item {
-    padding: 6px 10px;
-  }
-
-  /* 日付入力欄の大きさ調整 */
-  input[type="date"], input[type="time"] {
+@media (max-width: 600px) {
+  input, button {
     font-size: 14px;
+    padding: 8px 12px;  /* 少し大きめのボタン */
+  }
+
+  .task-item {
+    padding: 8px 12px;
+  }
+
+  .task-checkbox {
+    width: 16px;
+    height: 16px;
   }
 }
 @media (max-width: 600px) {
-  .container {
-    padding: 10px;
-    margin: 0;
-  }
-
-  button {
-    width: 100%;   /* ボタンをスマホ幅いっぱいに */
+  .task-item {
+    padding: 8px 12px;
   }
 }
+
