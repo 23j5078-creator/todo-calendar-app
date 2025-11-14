@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const USER_PREFIX = "memoapp-user-";
 
   let currentUser = null;
-  let currentUserData = null; // { passwordHash, memos: [...] }
+  let currentUserData = null;
 
   // ===== ユーティリティ =====
   async function hashPassword(password) {
@@ -132,11 +132,25 @@ document.addEventListener("DOMContentLoaded", () => {
   function showMemoSection(username, userData) {
     currentUser = username;
     currentUserData = userData;
+    authSection.hidden = false;
     authSection.hidden = true;
     memoSection.hidden = false;
     currentUserLabel.textContent = username;
     renderMemos();
   }
+
+  // ===== ログインチェック =====
+  (function init() {
+    const lastUser = localStorage.getItem(CURRENT_USER_KEY);
+    if (lastUser) {
+      const userData = loadUserData(lastUser);
+      if (userData) {
+        showMemoSection(lastUser, userData);
+        return;
+      }
+    }
+    showAuthSection();
+  })();
 
   // ===== ログイン =====
   async function handleLogin() {
@@ -253,17 +267,4 @@ document.addEventListener("DOMContentLoaded", () => {
   logoutBtn.addEventListener("click", () => {
     handleLogout();
   });
-
-  // ===== 初期処理：前回ログインユーザーがいればそのまま表示 =====
-  (function init() {
-    const lastUser = localStorage.getItem(CURRENT_USER_KEY);
-    if (lastUser) {
-      const userData = loadUserData(lastUser);
-      if (userData) {
-        showMemoSection(lastUser, userData);
-        return;
-      }
-    }
-    showAuthSection();
-  })();
 });
