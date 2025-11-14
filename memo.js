@@ -19,8 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const CURRENT_USER_KEY = "memoapp-current-user";
   const USER_PREFIX = "memoapp-user-";
   
-  const CURRENT_USER_KEY = "memoapp-current-user";
-  const USER_PREFIX = "memoapp-user-";
+
 
   const ADMIN_USERNAME = "admin"; // これを追加
 
