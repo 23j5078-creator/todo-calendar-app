@@ -1,0 +1,284 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f4f6fb;
+  color: #333;
+}
+
+.app {
+  max-width: 640px;
+  margin: 40px auto;
+  padding: 24px 20px 32px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+/* 入力エリア */
+.input-area {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+#new-task {
+  flex: 1 1 180px;
+  min-width: 180px;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  border-radius: 999px;
+  border: 1px solid #d0d4e4;
+  outline: none;
+}
+
+#new-task:focus {
+  border-color: #4f7cff;
+  box-shadow: 0 0 0 2px rgba(79, 124, 255, 0.2);
+}
+
+#task-date,
+#task-start-time,
+#task-end-time,
+#task-type,
+#task-color {
+  padding: 10px 12px;
+  font-size: 0.9rem;
+  border-radius: 999px;
+  border: 1px solid #d0d4e4;
+  outline: none;
+  flex: 0 1 120px;
+}
+
+#task-date:focus,
+#task-start-time:focus,
+#task-end-time:focus,
+#task-type:focus,
+#task-color:focus {
+  border-color: #4f7cff;
+  box-shadow: 0 0 0 2px rgba(79, 124, 255, 0.2);
+}
+
+#add-btn {
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: none;
+  background: #4f7cff;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+#add-btn:hover {
+  opacity: 0.9;
+}
+
+#add-btn:active {
+  transform: scale(0.97);
+}
+
+/* コントロール */
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 0.85rem;
+  color: #555;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filters {
+  display: flex;
+  gap: 6px;
+}
+
+.filter-btn {
+  border-radius: 999px;
+  border: 1px solid #d0d4e4;
+  padding: 4px 10px;
+  background: #fff;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.filter-btn.active {
+  background: #4f7cff;
+  color: #fff;
+  border-color: #4f7cff;
+}
+
+/* Google連携ボタン */
+.sync-btn {
+  border-radius: 999px;
+  border: 1px solid #4f7cff;
+  padding: 4px 10px;
+  background: #e9efff;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.sync-btn:hover {
+  background: #d4e0ff;
+}
+
+/* タスクリスト */
+.task-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.section-header {
+  padding: 6px 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #555;
+  background: #f5f7ff;
+  border-radius: 6px;
+  margin-top: 8px;
+  margin-bottom: 4px;
+}
+
+.task-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 8px;
+  border-bottom: 1px solid #f0f2f8;
+  border-left: 4px solid transparent;
+}
+
+.task-item:last-child {
+  border-bottom: none;
+}
+
+.task-item.overdue:not(.completed) {
+  border-left-color: #ff7676;
+}
+
+.task-checkbox {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+}
+
+.task-text {
+  flex: 1;
+  font-size: 0.95rem;
+  word-break: break-word;
+}
+
+.task-text.completed {
+  text-decoration: line-through;
+  color: #999;
+}
+
+.task-meta {
+  font-size: 0.7rem;
+  color: #aaa;
+  margin-top: 2px;
+}
+
+.task-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+/* ボタン */
+.icon-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: #999;
+  padding: 4px;
+}
+
+.icon-btn:hover {
+  color: #e05555;
+}
+
+/* カラーラベル */
+.task-color-label {
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: #eef0ff;
+  color: #555;
+}
+
+/* スマホ用 */
+@media (max-width: 480px) {
+  .app {
+    margin: 16px;
+    padding: 16px;
+  }
+
+  .input-area {
+    flex-direction: column;
+  }
+
+  #new-task,
+  #task-date,
+  #task-start-time,
+  #task-end-time,
+  #task-type,
+  #task-color,
+  #add-btn {
+    width: 100%;
+  }
+
+  .task-item {
+    align-items: flex-start;
+  }
+
+  .task-right {
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+  }
+}
+
+.app-footer {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #aaa;
+}
+.auto-sync {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: #666;
+}
+.auto-sync input {
+  width: 14px;
+  height: 14px;
+}
