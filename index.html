@@ -1,94 +1,94 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>やることリスト + Googleカレンダー連携</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="app">
-    <header class="app-header">
-      <h1>やることリスト</h1>
-      <p class="subtitle">ToDo と Googleカレンダーをまとめて管理</p>
-    </header>
+  <!DOCTYPE html>
+  <html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>やることリスト + Googleカレンダー連携</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="app">
+      <header class="app-header">
+        <h1>やることリスト</h1>
+        <p class="subtitle">ToDo と Googleカレンダーをまとめて管理</p>
+      </header>
 
-    <main>
-      <!-- 追加エリア -->
-      <section class="input-area">
-        <input
-          id="new-task"
-          type="text"
-          placeholder="例）レポートを書く、インターン調べる、洗濯する…"
-        >
-        <input
-          id="task-date"
-          type="date"
-          title="日付"
-        >
-        <input
-          id="task-start-time"
-          type="time"
-          title="開始時間（予定用）"
-        >
-        <input
-          id="task-end-time"
-          type="time"
-          title="締切 / 終了時間"
-        >
-        <select id="task-type" title="タスクか予定か">
-          <option value="task">タスク（締切まで）</option>
-          <option value="event">予定（何時から何時まで）</option>
-        </select>
-        <select id="task-color" title="カラー（カレンダー色）">
-          <option value="">色なし</option>
-          <option value="1">青</option>
-          <option value="2">緑</option>
-          <option value="5">黄</option>
-          <option value="11">赤</option>
-        </select>
-        <button id="add-btn">追加</button>
-      </section>
+      <main>
+        <!-- 追加エリア -->
+        <section class="input-area">
+          <input
+            id="new-task"
+            type="text"
+            placeholder="例）レポートを書く、インターン調べる、洗濯する…"
+          >
+          <input
+            id="task-date"
+            type="date"
+            title="日付"
+          >
+          <input
+            id="task-start-time"
+            type="time"
+            title="開始時間（予定用）"
+          >
+          <input
+            id="task-end-time"
+            type="time"
+            title="締切 / 終了時間"
+          >
+          <select id="task-type" title="タスクか予定か">
+            <option value="task">タスク（締切まで）</option>
+            <option value="event">予定（何時から何時まで）</option>
+          </select>
+          <select id="task-color" title="カラー（カレンダー色）">
+            <option value="">色なし</option>
+            <option value="1">青</option>
+            <option value="2">緑</option>
+            <option value="5">黄</option>
+            <option value="11">赤</option>
+          </select>
+          <button id="add-btn">追加</button>
+        </section>
 
-      <!-- コントロール（フィルタ） -->
-      <section class="controls">
-        <span id="left-count">残り 0 件</span>
-        <div class="filters">
-          <button class="filter-btn active" data-filter="all">すべて</button>
-          <button class="filter-btn" data-filter="active">作業中</button>
-          <button class="filter-btn" data-filter="completed">完了</button>
-        </div>
-      </section>
+        <!-- コントロール（フィルタ） -->
+        <section class="controls">
+          <span id="left-count">残り 0 件</span>
+          <div class="filters">
+            <button class="filter-btn active" data-filter="all">すべて</button>
+            <button class="filter-btn" data-filter="active">作業中</button>
+            <button class="filter-btn" data-filter="completed">完了</button>
+          </div>
+        </section>
 
-     
-            <!-- Google連携ボタン -->
-      <section class="controls">
-        <span>Googleカレンダー連携</span>
-        <div class="filters">
-          <button id="sync-to-google" class="sync-btn">タスク / 予定 → カレンダー</button>
-          <button id="sync-from-google" class="sync-btn">カレンダー → タスク / 予定</button>
-        </div>
-        <label class="auto-sync">
-          <input type="checkbox" id="auto-sync-checkbox">
-          自動でカレンダーから読み込む（5分ごと）
-        </label>
-      </section>
+      
+              <!-- Google連携ボタン -->
+        <section class="controls">
+          <span>Googleカレンダー連携</span>
+          <div class="filters">
+            <button id="sync-to-google" class="sync-btn">タスク / 予定 → カレンダー</button>
+            <button id="sync-from-google" class="sync-btn">カレンダー → タスク / 予定</button>
+          </div>
+          <label class="auto-sync">
+            <input type="checkbox" id="auto-sync-checkbox">
+            自動でカレンダーから読み込む（5分ごと）
+          </label>
+        </section>
 
-      <!-- リスト表示 -->
-      <section>
-        <ul id="task-list" class="task-list">
-          <!-- JSでここにタスクを追加する -->
-        </ul>
-      </section>
-    </main>
+        <!-- リスト表示 -->
+        <section>
+          <ul id="task-list" class="task-list">
+            <!-- JSでここにタスクを追加する -->
+          </ul>
+        </section>
+      </main>
 
-    <footer class="app-footer">
-      <small>※ このPCのブラウザ内に保存されます（localStorage 使用）</small>
-    </footer>
-  </div>
+      <footer class="app-footer">
+        <small>※ このPCのブラウザ内に保存されます（localStorage 使用）</small>
+      </footer>
+    </div>
 
-  <!-- Google Identity Services（認証用） -->
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="script.js"></script>
-</body>
-</html>
+    <!-- Google Identity Services（認証用） -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="script.js"></script>
+  </body>
+  </html>

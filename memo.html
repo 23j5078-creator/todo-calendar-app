@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>メモ帳</title>
+  <link rel="stylesheet" href="memo.css">
+</head>
+<body>
+
+<div class="login-container" id="login-area">
+  <h2>ログイン</h2>
+  <input type="text" id="login-user" placeholder="ユーザー名">
+  <input type="password" id="login-pass" placeholder="パスワード">
+  <button id="login-btn">ログイン</button>
+</div>
+
+<div class="memo-app" id="memo-area" style="display:none;">
+  <h1>メモ帳</h1>
+
+  <textarea id="memo-input" placeholder="メモを書く…"></textarea>
+  <button id="save-btn">メモ保存</button>
+
+  <h2>保存したメモ</h2>
+  <ul id="memo-list"></ul>
+
+  <button id="logout-btn" class="logout">ログアウト</button>
+</div>
+
+<script src="memo.js"></script>
+</body>
+</html>
