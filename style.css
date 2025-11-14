@@ -282,55 +282,34 @@ body {
   width: 14px;
   height: 14px;
 }
-/* スマホ用 */
+
 @media (max-width: 600px) {
   body {
     font-size: 14px;
   }
 
-  h1 {
-    font-size: 1.4rem;  /* 小さめに */
+  .app-header h1 {
+    font-size: 1.4rem;   /* ← だいぶ小さくする */
   }
 
-  h2 {
-    font-size: 1.1rem;  /* もう少し小さめ */
+  .subtitle {
+    font-size: 0.8rem;
   }
 
-  /* 余分なスペースを削る */
-  .task-item {
-    padding: 8px 12px;
-  }
-
-  /* 日付と時刻の入力をスマホに合わせる */
-  input[type="date"], input[type="time"] {
+  input,
+  button {
     font-size: 14px;
     padding: 8px;
   }
 
-  .task-checkbox {
-    width: 16px;
-    height: 16px;
+  .task-item {
+    padding: 6px 10px;
   }
-}
 
-@media (max-width: 600px) {
-  input, button {
+  input[type="date"],
+  input[type="time"] {
     font-size: 14px;
-    padding: 8px 12px;  /* 少し大きめのボタン */
-  }
-
-  .task-item {
-    padding: 8px 12px;
-  }
-
-  .task-checkbox {
-    width: 16px;
-    height: 16px;
   }
 }
-@media (max-width: 600px) {
-  .task-item {
-    padding: 8px 12px;
-  }
-}
+
 
