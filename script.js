@@ -520,7 +520,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const details = encodeURIComponent("ToDoアプリから追加");
         const dates = `${startStr}/${endStr}`;
         const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dates}&details=${details}&sf=true&output=xml`;
-        window.open(url, "_blank");
+        window.location.href = url;
       });
       right.appendChild(calBtn);
     }
