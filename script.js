@@ -9,24 +9,29 @@ document.addEventListener("DOMContentLoaded", () => {
   const typeSelect = document.getElementById("task-type");
   const colorSelect = document.getElementById("task-color");
   const addBtn = document.getElementById("add-btn");
+
   const listEl = document.getElementById("task-list");
   const leftCountEl = document.getElementById("left-count");
   const filterButtons = document.querySelectorAll(".filter-btn");
+
   const syncToGoogleBtn = document.getElementById("sync-to-google");
   const syncFromGoogleBtn = document.getElementById("sync-from-google");
-
   const autoSyncCheckbox = document.getElementById("auto-sync-checkbox");
 
+  // ==========================
+  // 設定・状態
+  // ==========================
   const AUTO_SYNC_INTERVAL_MS = 5 * 60 * 1000; // 5分
   let autoSyncTimer = null;
+  let editingTaskId = null; // 今編集中のタスクID（なければ null）
 
-  // ==========================
-  // ToDo データ管理（localStorage）
-  // ==========================
   const STORAGE_KEY = "todo-tasks-gcal-v3";
   let tasks = [];
   let currentFilter = "all";
 
+  // ==========================
+  // localStorage 関連
+  // ==========================
   function loadTasks() {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) {
@@ -40,11 +45,11 @@ document.addEventListener("DOMContentLoaded", () => {
         text: t.text,
         completed: !!t.completed,
         createdAt: t.createdAt || new Date().toISOString(),
-        date: t.date || t.dueDate || null,                // YYYY-MM-DD
-        startTime: t.startTime || null,                   // HH:MM
-        endTime: t.endTime || t.dueTime || null,          // HH:MM
+        date: t.date || t.dueDate || null,          // YYYY-MM-DD
+        startTime: t.startTime || null,             // HH:MM
+        endTime: t.endTime || t.dueTime || null,    // HH:MM
         colorId: t.colorId || "",
-        type: t.type === "event" ? "event" : "task"       // デフォルトはタスク
+        type: t.type === "event" ? "event" : "task" // デフォルトはタスク
       }));
     } catch {
       tasks = [];
@@ -63,39 +68,9 @@ document.addEventListener("DOMContentLoaded", () => {
     return `${y}-${m}-${day}`;
   }
 
-  function addTask(text, dateStr, startTimeStr, endTimeStr, typeStr, colorIdStr) {
-    const trimmed = text.trim();
-    if (!trimmed) return;
-
-    const type = typeStr === "event" ? "event" : "task";
-    const date = dateStr || null;
-    const startTime = type === "event" ? (startTimeStr || null) : null;
-    const endTime = endTimeStr || null;
-
-    const task = {
-      id: Date.now(),
-      text: trimmed,
-      completed: false,
-      createdAt: new Date().toISOString(),
-      date,
-      startTime,
-      endTime,
-      colorId: colorIdStr || "",
-      type
-    };
-
-    tasks.unshift(task);
-    saveTasks();
-    render();
-
-    input.value = "";
-    dateInput.value = "";
-    startTimeInput.value = "";
-    endTimeInput.value = "";
-    typeSelect.value = "task";
-    colorSelect.value = "";
-  }
-
+  // ==========================
+  // 基本操作
+  // ==========================
   function deleteTask(id) {
     tasks = tasks.filter((t) => t.id !== id);
     saveTasks();
@@ -133,6 +108,9 @@ document.addEventListener("DOMContentLoaded", () => {
     leftCountEl.textContent = `残り ${left} 件`;
   }
 
+  // ==========================
+  // 表示用フォーマット
+  // ==========================
   function formatDate(isoStr) {
     if (!isoStr) return "";
     const d = new Date(isoStr);
@@ -163,7 +141,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (dateStr) return `予定: ${dateLabel}`;
       return "予定";
     } else {
-      // task
       if (dateStr && endTime) {
         return `締切: ${dateLabel} ${endTime}`;
       }
@@ -197,7 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Google 認証（OAuth2）
   // ==========================
   const GOOGLE_CLIENT_ID =
-    "229894785828-89et0trr2qo7v1j03hqdgbem6819hatj.apps.googleusercontent.com"; // ←ここを自分のIDに差し替える！
+    "229894785828-89et0trr2qo7v1j03hqdgbem6819hatj.apps.googleusercontent.com";
   const GOOGLE_SCOPES =
     "https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/calendar.readonly";
 
@@ -206,11 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function ensureGoogleTokenClient() {
     if (!googleTokenClient) {
-      if (
-        !window.google ||
-        !google.accounts ||
-        !google.accounts.oauth2
-      ) {
+      if (!window.google || !google.accounts || !google.accounts.oauth2) {
         alert("Googleのスクリプトがまだ読み込まれていません。少し待ってから再試行してください。");
         return null;
       }
@@ -252,11 +225,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!task.date) return null;
 
     if (task.type === "event") {
-      // 予定：開始時間必須にする（なければ 09:00）
       const time = task.startTime || "09:00";
       return new Date(`${task.date}T${time}:00`);
     } else {
-      // タスク：締切時間だけ → 「〜何時まで」
       const time = task.endTime || "23:00";
       return new Date(`${task.date}T${time}:00`);
     }
@@ -268,11 +239,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (task.date && task.endTime) {
         return new Date(`${task.date}T${task.endTime}:00`);
       }
-      // 終了時間指定なし → +1時間
-      return new Date(startDate.getTime() + 60 * 60 * 1000);
+      return new Date(startDate.getTime() + 60 * 60 * 1000); // +1時間
     } else {
-      // タスク：締切だけイメージなので +30分とかでもOK
-      return new Date(startDate.getTime() + 30 * 60 * 1000);
+      return new Date(startDate.getTime() + 30 * 60 * 1000); // +30分
     }
   }
 
@@ -298,7 +267,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const eventBody = {
           summary: task.text,
           description:
-            task.type === "event" ? "予定（ToDoアプリから追加）" : "タスクの締切（ToDoアプリから追加）",
+            task.type === "event"
+              ? "予定（ToDoアプリから追加）"
+              : "タスクの締切（ToDoアプリから追加）",
           start: {
             dateTime: startDate.toISOString(),
             timeZone: "Asia/Tokyo",
@@ -337,8 +308,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-    async function syncFromGoogleToTasks(options = {}) {
-    const { silent = false } = options; // silent=true のときはアラートを出さない
+  async function syncFromGoogleToTasks(options = {}) {
+    const { silent = false } = options;
     try {
       const token = await getAccessToken();
 
@@ -369,23 +340,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         return;
       }
-        function startAutoSync() {
-    if (autoSyncTimer) return; // すでに動いていたら何もしない
-    // まず1回すぐ同期（アラートなし）
-    syncFromGoogleToTasks({ silent: true });
-    // その後、指定間隔で自動同期
-    autoSyncTimer = setInterval(() => {
-      syncFromGoogleToTasks({ silent: true });
-    }, AUTO_SYNC_INTERVAL_MS);
-  }
-
-  function stopAutoSync() {
-    if (autoSyncTimer) {
-      clearInterval(autoSyncTimer);
-      autoSyncTimer = null;
-    }
-  }
-
 
       const data = await res.json();
 
@@ -403,8 +357,7 @@ document.addEventListener("DOMContentLoaded", () => {
           dateStr = sIso.substring(0, 10);
           startTime = sIso.substring(11, 16);
         } else if (start.date) {
-          // 終日イベント
-          dateStr = start.date;
+          dateStr = start.date; // 終日イベント
         }
 
         if (end.dateTime) {
@@ -433,7 +386,7 @@ document.addEventListener("DOMContentLoaded", () => {
           startTime,
           endTime,
           colorId,
-          type: "event"
+          type: "event",
         });
       }
 
@@ -450,9 +403,49 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function startAutoSync() {
+    if (autoSyncTimer) return;
+    // まず1回すぐ同期（アラートなし）
+    syncFromGoogleToTasks({ silent: true });
+    // その後、指定間隔で自動同期
+    autoSyncTimer = setInterval(() => {
+      syncFromGoogleToTasks({ silent: true });
+    }, AUTO_SYNC_INTERVAL_MS);
+  }
+
+  function stopAutoSync() {
+    if (autoSyncTimer) {
+      clearInterval(autoSyncTimer);
+      autoSyncTimer = null;
+    }
+  }
 
   // ==========================
-  // 描画（今日 / 今後 / その他）
+  // 編集開始（フォームに反映）
+  // ==========================
+  function startEditTask(task) {
+    input.value = task.text || "";
+    dateInput.value = task.date || "";
+    startTimeInput.value = task.startTime || "";
+    endTimeInput.value = task.endTime || "";
+    typeSelect.value = task.type || "task";
+    colorSelect.value = task.colorId || "";
+
+    editingTaskId = task.id;
+    addBtn.textContent = "更新";
+  }
+
+  function clearForm() {
+    input.value = "";
+    dateInput.value = "";
+    startTimeInput.value = "";
+    endTimeInput.value = "";
+    typeSelect.value = "task";
+    colorSelect.value = "";
+  }
+
+  // ==========================
+  // タスク要素の生成（編集ボタン付き）
   // ==========================
   function createTaskElement(task, todayStr) {
     const li = document.createElement("li");
@@ -490,8 +483,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const parts = [];
     parts.push(`作成: ${createdText}`);
     if (dueText) parts.push(dueText);
-    if (task.type === "event") parts.push("種別: 予定");
-    else parts.push("種別: タスク");
+    parts.push(task.type === "event" ? "種別: 予定" : "種別: タスク");
     meta.textContent = parts.join(" ／ ");
 
     textContainer.appendChild(textSpan);
@@ -507,13 +499,12 @@ document.addEventListener("DOMContentLoaded", () => {
       right.appendChild(label);
     }
 
-    // Googleカレンダーの予定作成画面を開くボタン（簡易）
+    // Googleカレンダーの予定作成画面を開くボタン
     if (task.date) {
       const calBtn = document.createElement("button");
       calBtn.className = "icon-btn";
       calBtn.textContent = "カレンダー画面";
       calBtn.title = "Googleカレンダーの予定作成画面を開く";
-
       calBtn.addEventListener("click", () => {
         const baseDate = buildStartDate(task) || new Date(task.date);
         const toYyyymmdd = (date) => {
@@ -531,10 +522,19 @@ document.addEventListener("DOMContentLoaded", () => {
         const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dates}&details=${details}&sf=true&output=xml`;
         window.location.href = url;
       });
-
       right.appendChild(calBtn);
     }
 
+    // 編集ボタン
+    const editBtn = document.createElement("button");
+    editBtn.className = "icon-btn";
+    editBtn.textContent = "編集";
+    editBtn.addEventListener("click", () => {
+      startEditTask(task);
+    });
+    right.appendChild(editBtn);
+
+    // 削除ボタン
     const deleteBtn = document.createElement("button");
     deleteBtn.className = "icon-btn";
     deleteBtn.textContent = "削除";
@@ -543,7 +543,6 @@ document.addEventListener("DOMContentLoaded", () => {
         deleteTask(task.id);
       }
     });
-
     right.appendChild(deleteBtn);
 
     li.appendChild(checkbox);
@@ -553,6 +552,9 @@ document.addEventListener("DOMContentLoaded", () => {
     return li;
   }
 
+  // ==========================
+  // 描画
+  // ==========================
   function render() {
     const filtered = getFilteredTasks();
     listEl.innerHTML = "";
@@ -602,43 +604,73 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ==========================
+  // 追加 / 更新（フォーム送信処理）
+  // ==========================
+  function handleSubmit() {
+    const text = input.value.trim();
+    if (!text) {
+      alert("やることの内容を入力してください");
+      return;
+    }
+
+    const dateStr = dateInput.value || null;
+    const startTimeStr = startTimeInput.value || null;
+    const endTimeStr = endTimeInput.value || null;
+    const typeStr = typeSelect.value || "task";
+    const colorIdStr = colorSelect.value || "";
+    const type = typeStr === "event" ? "event" : "task";
+
+    if (editingTaskId !== null) {
+      // 編集モード：既存タスクを更新
+      const t = tasks.find((t) => t.id === editingTaskId);
+      if (t) {
+        t.text = text;
+        t.date = dateStr;
+        t.startTime = type === "event" ? startTimeStr : null;
+        t.endTime = endTimeStr;
+        t.type = type;
+        t.colorId = colorIdStr;
+      }
+      editingTaskId = null;
+      addBtn.textContent = "追加";
+    } else {
+      // 新規追加
+      const task = {
+        id: Date.now(),
+        text,
+        completed: false,
+        createdAt: new Date().toISOString(),
+        date: dateStr,
+        startTime: type === "event" ? startTimeStr : null,
+        endTime: endTimeStr,
+        colorId: colorIdStr,
+        type,
+      };
+      tasks.unshift(task);
+    }
+
+    saveTasks();
+    render();
+    clearForm();
+  }
+
+  // ==========================
   // イベント登録
   // ==========================
   addBtn.addEventListener("click", () => {
-    addTask(
-      input.value,
-      dateInput.value,
-      startTimeInput.value,
-      endTimeInput.value,
-      typeSelect.value,
-      colorSelect.value
-    );
+    handleSubmit();
   });
 
   input.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
-      addTask(
-        input.value,
-        dateInput.value,
-        startTimeInput.value,
-        endTimeInput.value,
-        typeSelect.value,
-        colorSelect.value
-      );
+      handleSubmit();
     }
   });
 
   [dateInput, startTimeInput, endTimeInput].forEach((el) => {
     el.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
-        addTask(
-          input.value,
-          dateInput.value,
-          startTimeInput.value,
-          endTimeInput.value,
-          typeSelect.value,
-          colorSelect.value
-        );
+        handleSubmit();
       }
     });
   });
@@ -656,6 +688,7 @@ document.addEventListener("DOMContentLoaded", () => {
   syncFromGoogleBtn.addEventListener("click", () => {
     syncFromGoogleToTasks();
   });
+
   autoSyncCheckbox.addEventListener("change", () => {
     if (autoSyncCheckbox.checked) {
       startAutoSync();
