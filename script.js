@@ -1,3 +1,26 @@
+// ==== シンプルなパスワードロック ====
+// ※ 本気のセキュリティではなく「覗き見防止」用です。
+(function () {
+  const LOCK_PASSWORD = "todo123";  // ← 好きなパスワードに変更OK
+  const SESSION_KEY = "todo-calendar-app-unlocked";
+
+  // すでにこのタブで一度解錠済みなら、そのまま通す
+  if (sessionStorage.getItem(SESSION_KEY) === "true") {
+    return;
+  }
+
+  const entered = prompt("パスワードを入力してください");
+
+  if (entered === LOCK_PASSWORD) {
+    // このタブでは再度聞かない
+    sessionStorage.setItem(SESSION_KEY, "true");
+  } else {
+    alert("パスワードが違います。");
+    // 画面の中身を消して終了
+    document.body.innerHTML = "<p>アクセスが拒否されました。</p>";
+    throw new Error("Locked");
+  }
+})();
 document.addEventListener("DOMContentLoaded", () => {
   // ==========================
   // ロック画面（簡易パスワード認証）
