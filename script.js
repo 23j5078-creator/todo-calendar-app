@@ -1,6 +1,37 @@
 document.addEventListener("DOMContentLoaded", () => {
   // ==========================
-  // DOM 取得
+  // ロック画面（簡易パスワード認証）
+  // ==========================
+  const lockScreen = document.getElementById("lock-screen");
+  const mainApp = document.getElementById("main-app");
+  const appPwInput = document.getElementById("app-password");
+  const unlockBtn = document.getElementById("unlock-btn");
+
+  // 好きなパスワードに変えてOK（ソース見れば分かるので本当の秘密には使わない）
+  const LOCK_PASSWORD = "todo123";
+
+  function unlockApp() {
+    const entered = appPwInput.value;
+    if (entered === LOCK_PASSWORD) {
+      if (lockScreen) lockScreen.style.display = "none";
+      if (mainApp) mainApp.hidden = false;
+      appPwInput.value = "";
+    } else {
+      alert("パスワードが違います");
+    }
+  }
+
+  if (unlockBtn && appPwInput) {
+    unlockBtn.addEventListener("click", unlockApp);
+    appPwInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        unlockApp();
+      }
+    });
+  }
+
+  // ==========================
+  // DOM 取得（本体アプリ）
   // ==========================
   const input = document.getElementById("new-task");
   const dateInput = document.getElementById("task-date");
@@ -499,13 +530,16 @@ document.addEventListener("DOMContentLoaded", () => {
       right.appendChild(label);
     }
 
-    // Googleカレンダーの予定作成画面を開くボタン
+    // Googleカレンダーの予定作成画面を開くボタン（新しいタブ）
     if (task.date) {
       const calBtn = document.createElement("button");
       calBtn.className = "icon-btn";
       calBtn.textContent = "カレンダー画面";
       calBtn.title = "Googleカレンダーの予定作成画面を開く";
-      calBtn.addEventListener("click", () => {
+      calBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
         const baseDate = buildStartDate(task) || new Date(task.date);
         const toYyyymmdd = (date) => {
           const y = date.getFullYear();
@@ -657,17 +691,22 @@ document.addEventListener("DOMContentLoaded", () => {
   // ==========================
   // イベント登録
   // ==========================
-  addBtn.addEventListener("click", () => {
-    handleSubmit();
-  });
-
-  input.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
+  if (addBtn) {
+    addBtn.addEventListener("click", () => {
       handleSubmit();
-    }
-  });
+    });
+  }
+
+  if (input) {
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        handleSubmit();
+      }
+    });
+  }
 
   [dateInput, startTimeInput, endTimeInput].forEach((el) => {
+    if (!el) return;
     el.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         handleSubmit();
@@ -681,21 +720,27 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  syncToGoogleBtn.addEventListener("click", () => {
-    syncTasksToGoogle();
-  });
+  if (syncToGoogleBtn) {
+    syncToGoogleBtn.addEventListener("click", () => {
+      syncTasksToGoogle();
+    });
+  }
 
-  syncFromGoogleBtn.addEventListener("click", () => {
-    syncFromGoogleToTasks();
-  });
+  if (syncFromGoogleBtn) {
+    syncFromGoogleBtn.addEventListener("click", () => {
+      syncFromGoogleToTasks();
+    });
+  }
 
-  autoSyncCheckbox.addEventListener("change", () => {
-    if (autoSyncCheckbox.checked) {
-      startAutoSync();
-    } else {
-      stopAutoSync();
-    }
-  });
+  if (autoSyncCheckbox) {
+    autoSyncCheckbox.addEventListener("change", () => {
+      if (autoSyncCheckbox.checked) {
+        startAutoSync();
+      } else {
+        stopAutoSync();
+      }
+    });
+  }
 
   // ==========================
   // 初期化
