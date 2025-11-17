@@ -1,7 +1,7 @@
 // ==== シンプルなパスワードロック ====
 // ※ 本気のセキュリティではなく「覗き見防止」用です。
 (function () {
-  const LOCK_PASSWORD = "todo123";  // ← 好きなパスワードに変更OK
+  const LOCK_PASSWORD = "1111";  // ← 好きなパスワードに変更OK
   const SESSION_KEY = "todo-calendar-app-unlocked";
 
   // すでにこのタブで一度解錠済みなら、そのまま通す
