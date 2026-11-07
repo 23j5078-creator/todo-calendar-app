@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>CLIP SCOUT v2 — TikTok・動画ネタ収集ボード</title>
+<title>CLIP SCOUT v3 — Safariで動画探し</title>
 <meta name="description" content="素材を探して保存、編集候補を整理するローカル動画ネタ収集ボード">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap');
@@ -51,13 +51,13 @@
 <main class="main">
  <div id="viewDiscover">
   <div class="top"><div><span class="eyebrow">YOUR VIDEO RESEARCH SPACE</span><h1>次のバズ動画のヒントを探そう ✨</h1><p>素材探しから候補のストックまで、ひとつの場所で。</p></div><div class="status"><span class="dot"></span>ローカル保存</div></div>
-  <section class="hero"><div><div class="hero-label">✦ FIND SOMETHING AMAZING</div><h2>TikTokもYouTubeも<br>ここからまとめて探そう。</h2><p>各サイトで直接検索して、URLをまとめて保存。無料素材APIも使えます。</p></div><div class="hero-graphic" aria-hidden="true">🎬</div></section>
+  <section class="hero"><div><div class="hero-label">✦ FIND SOMETHING AMAZING</div><h2>TikTokもYouTubeも<br>ここからまとめて探そう。</h2><p>TikTokとYouTubeはSafariのGoogle検索で探せます。URLの保存や無料素材検索もできます。</p></div><div class="hero-graphic" aria-hidden="true">🎬</div></section>
   <section class="search-panel">
    <h2 class="panel-label"><span class="num">01</span> どんな動画を探す？</h2>
    <form class="search-form" id="searchForm"><label class="search-box" for="query"><span style="font-size:19px;color:#aaa3c1">⌕</span><input id="query" autocomplete="off" placeholder="例：funny cats / space / waterfall" maxlength="90"></label><button class="primary" type="submit" id="searchButton">✦ 検索先を表示</button></form>
    <div class="chips" id="chips"><button class="chip" type="button" data-query="funny cats">🐱 おもしろ動物</button><button class="chip" type="button" data-query="funny dog">🐶 犬のリアクション</button><button class="chip" type="button" data-query="unexpected moments">😲 ハプニング</button><button class="chip" type="button" data-query="space">🚀 宇宙</button><button class="chip" type="button" data-query="ocean animals">🐬 海の生き物</button><button class="chip" type="button" data-query="sports trick">⚽ スーパープレー</button></div>
    <h3 style="margin:20px 0 5px;font-size:14px">1. 検索するサイトを選ぶ</h3>
-   <p class="guide-line">サイトを押すと<strong>検索結果を別タブで表示</strong>します。TikTokなどの結果はこのHTML内へ自動取り込みされません。</p>
+   <p class="guide-line"><strong>TikTokとYouTubeはSafariのGoogle検索で開きます。</strong> 動画アプリへ直接飛びにくくする対策です。検索結果内の動画を押すと外部アプリが開く場合があります。結果はCLIP SCOUT内へ自動取り込みされません。</p>
    <div class="site-grid" id="siteGrid"></div>
    <div class="variants" id="variants" aria-label="関連キーワード"></div>
    <h3 style="margin:23px 0 6px;font-size:14px">2. 無料素材の検索結果をアプリ内で取得</h3>
@@ -86,7 +86,7 @@
  </div>
  <div id="viewHelp" class="hidden">
   <div class="top"><div><span class="eyebrow">QUICK GUIDE</span><h1>このアプリの使い方 📖</h1><p>動画を探す、残す、編集に使うまで。</p></div></div>
-  <div class="howto"><div class="help-card"><h3>🔎 1. TikTok等で検索</h3><p>キーワードを入力して「検索先を表示」を押します。TikTokなど好きなサイトをクリックすると、サイト内検索が開きます。別途「無料素材の動画候補を取得」でWikimedia CommonsとInternet Archiveの公開APIへ問い合わせます。Pixabayは<a href="https://pixabay.com/api/docs/" target="_blank" rel="noopener noreferrer">公式API</a>のキーを設定すれば追加できます。</p></div><div class="help-card"><h3>📌 2. URLから候補を保存</h3><p>TikTokなどで見つけた動画URLを1行ずつ貼り付けて一括保存できます。無料素材の検索結果も候補ボードに追加できます。候補ボードではスター、メモ、利用確認ステータスを記録できます。自動ダウンロードは行いません。</p></div><div class="help-card"><h3>🛡 3. 権利を確認</h3><p>CC0やパブリックドメインは条件が比較的緩やかです。CC BYは表示義務、CC BY-SAは条件継承などがあります。CC BY-NCは商用利用できません。元ページとライセンス、人物の権利も確認してください。<a href="https://creativecommons.org/share-your-work/cclicenses/" target="_blank" rel="noopener noreferrer">CCライセンス解説</a></p></div><div class="help-card"><h3>🗂 4. 編集企画に活用</h3><p>CSVに出力するとExcelなどで動画タイトル、URL、作者、ライセンス、ステータス、メモを整理できます。端末変更時はJSONバックアップが便利です。</p></div><div class="help-card"><h3>🌍 他のサイトも直接検索</h3><p>検索リンクからTikTok、YouTube、Reddit、Pexelsなどへ移動できます。これらの動画情報はアプリに自動取得されないため、気になる動画のURLをコピーして一括登録してください。</p></div><div class="help-card"><h3>🧰 トラブル時</h3><p>ネット接続と検索語（英語推奨）を確認してください。外部サイトのAPI制限やCORS設定変更により取得できない場合があります。ブラウザのプライベートモードでは保存が消えることがあります。</p></div></div>
+  <div class="howto"><div class="help-card"><h3>🔎 1. TikTok等で検索</h3><p>キーワードを入力して「検索先を表示」を押します。TikTokとYouTubeはSafariのGoogle検索結果を開き、外部動画アプリへの自動切り替えを避けるようにしています。検索結果から動画を開くと動画アプリが起動する場合があります。別途「無料素材の動画候補を取得」でWikimedia CommonsとInternet Archiveの公開APIへ問い合わせます。Pixabayは<a href="https://pixabay.com/api/docs/" target="_blank" rel="noopener noreferrer">公式API</a>のキーを設定すれば追加できます。</p></div><div class="help-card"><h3>📌 2. URLから候補を保存</h3><p>TikTokなどで見つけた動画URLを1行ずつ貼り付けて一括保存できます。無料素材の検索結果も候補ボードに追加できます。候補ボードではスター、メモ、利用確認ステータスを記録できます。自動ダウンロードは行いません。</p></div><div class="help-card"><h3>🛡 3. 権利を確認</h3><p>CC0やパブリックドメインは条件が比較的緩やかです。CC BYは表示義務、CC BY-SAは条件継承などがあります。CC BY-NCは商用利用できません。元ページとライセンス、人物の権利も確認してください。<a href="https://creativecommons.org/share-your-work/cclicenses/" target="_blank" rel="noopener noreferrer">CCライセンス解説</a></p></div><div class="help-card"><h3>🗂 4. 編集企画に活用</h3><p>CSVに出力するとExcelなどで動画タイトル、URL、作者、ライセンス、ステータス、メモを整理できます。端末変更時はJSONバックアップが便利です。</p></div><div class="help-card"><h3>🌍 他のサイトも直接検索</h3><p>検索リンクからTikTok、YouTube、Reddit、Pexelsなどへ移動できます。これらの動画情報はアプリに自動取得されないため、気になる動画のURLをコピーして一括登録してください。</p></div><div class="help-card"><h3>🧰 トラブル時</h3><p>ネット接続と検索語（英語推奨）を確認してください。外部サイトのAPI制限やCORS設定変更により取得できない場合があります。ブラウザのプライベートモードでは保存が消えることがあります。</p></div></div>
  </div>
 </main>
 </div>
@@ -116,9 +116,9 @@ function setLinks(q){
  const term=(q||'funny cats').trim(), enc=encodeURIComponent(term);
  const tags=term.replace(/[#\s]+/g,'').trim(), tagEnc=encodeURIComponent(tags);
  const list=[
-  {name:'TikTok',cls:'tiktok',ico:'♪',caption:'ショート動画',url:'https://www.tiktok.com/search?q='+enc},
-  {name:'YouTube',cls:'youtube',ico:'▶',caption:'Shorts / 動画',url:'https://www.youtube.com/results?search_query='+enc},
-  {name:'TikTokタグ',cls:'tiktok',ico:'#',caption:'ハッシュタグ検索',url:'https://www.tiktok.com/tag/'+tagEnc},
+  {name:'TikTok (Safari検索)',cls:'tiktok',ico:'♪',caption:'GoogleでTikTok動画を探す',url:'https://www.google.com/search?q='+encodeURIComponent('site:tiktok.com/@ '+term)},
+  {name:'YouTube (Safari検索)',cls:'youtube',ico:'▶',caption:'GoogleでYouTube Shortsを探す',url:'https://www.google.com/search?q='+encodeURIComponent('site:youtube.com/shorts '+term)},
+  {name:'TikTokタグ (Safari)',cls:'tiktok',ico:'#',caption:'Googleでハッシュタグを探す',url:'https://www.google.com/search?q='+encodeURIComponent('site:tiktok.com/tag/ '+tags)},
   {name:'Reddit',cls:'reddit',ico:'●',caption:'面白動画の投稿',url:'https://www.reddit.com/search/?q='+enc},
   {name:'Pexels',cls:'pexels',ico:'▣',caption:'無料動画素材',url:'https://www.pexels.com/search/videos/'+enc+'/'},
   {name:'Pixabay',cls:'pixabay',ico:'◈',caption:'無料動画素材',url:'https://pixabay.com/videos/search/'+enc+'/'},
@@ -128,7 +128,7 @@ function setLinks(q){
  $('siteGrid').innerHTML=list.map(x=>`<a class="site-card ${x.cls}" target="_blank" rel="noopener noreferrer" href="${safe(x.url)}"><span class="site-logo">${safe(x.ico)}</span><span><strong>${safe(x.name)} ↗</strong><small>${safe(x.caption)}</small></span></a>`).join('');
  $('quicklinks').innerHTML='';
  const variations=[term,term+' funny',term+' fail',term+' unexpected',term+' compilation',term+' viral',term+' reaction',term+' caught on camera'];
- $('variants').innerHTML=variations.map(v=>`<a class="variant" target="_blank" rel="noopener noreferrer" href="https://www.tiktok.com/search?q=${encodeURIComponent(v)}">${safe(v)} ↗</a>`).join('');
+ $('variants').innerHTML=variations.map(v=>`<a class="variant" target="_blank" rel="noopener noreferrer" href="https://www.google.com/search?q=${encodeURIComponent("site:tiktok.com/@ "+v)}">${safe(v)} ↗</a>`).join('');
 }
 function unique(list){const d=new Set();return list.filter(x=>{if(d.has(x.id))return false;d.add(x.id);return true})}
 async function getJson(url,opts={}){const res=await fetch(url,{...opts,cache:'no-store'});if(!res.ok)throw Error('HTTP '+res.status);return res.json()}
